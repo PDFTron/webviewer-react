@@ -1,34 +1,21 @@
 # WebViewer-React
+Display PDFs, MS Office documents, images and even videos in your React app with ease.
 
-A React component for displaying document in your React app. It is developed with PDFTron's [WebViewer](https://www.pdftron.com/documentation/web/) library & React context APIs. Not only it wraps the WebViewer inside a React component, you will also have control over the WebViewer instance everywhere in your app.
-Want to handle the document inside you cool modal component? No problem.
+WebViewer-React wraps PDFTron's [WebViewer](https://www.pdftron.com/documentation/web/) as a React component and you will have access to the powerful webviewer instance anywhere in your app.
 
-## Live Demo
-[Demo](https://pdftron-ychen02.web.app/) 
-## Run the demo locally
+## Demo
+Online demo can be found [here](https://www.pdftron.com/webviewer/demo/) 
 
-To run the demo with `<DocumentViewer />` component:
-
-```
-git clone https://github.com/PDFTron/webviewer-react.git
-npm i && npm run installpeer
-npm run start
-```
-
-The above commands will install all dependencies, build the component and store the compiled module inside `www/lib/` folder, from where the example app will make imports for components / context hooks. After running the command you will be able to see the app live at `http://127.0.0.1:8000`.
-
-## To use this library in your own React project
-
-(package to be published to registry)
+## Quick start guide:
 
 ```
 npm i @pdftron/webviewer @pdftron/webviewer-react
 ```
 
-Inside you app's root component (where you setup all other providers):
+Inside you app's root component (or the place where you setup context providers):
 
 ```
-import { DocumentViewerProvider }
+import { DocumentViewerProvider } from '@pdftron/webviewer-react'
 ...
   return (
     <DocumentViewerProvider>
@@ -36,82 +23,22 @@ import { DocumentViewerProvider }
     </DocumentViewerProvider>
   )
 ```
-
-**IMPORTANT:** You will need to copy the library assets from './node_modules/@pdftron/webviewer/public' and place them at a location where you are able to serve them. Then provide the URL of these assets to the `path` option at the place where you initialize WebViewer instance. After that, simply create a ref and pass that into both WebViewer's initializer and the `<DocumentViewer/>` component.
-
-For example:
-
+**IMPORTANT:** You will need to host the library files which can be found in './node_modules/@pdftron/webviewer/public' then provide the URL to the `path` option at the place where you initialize WebViewer instance. 
+After that, place the `<DocumentViewer />` or the `<DocumentViewerSimpleDisplay />` component in your app where you want to display your document. 
 ```
-// YourComponent.tsx
-import WebViewer from '@pdftron/webviewer'
-import { DocumentViewer } from '@pdftron/webviewer-react'
+import { DocumentViewerSimpleDisplay } from '@pdftron/webviewer-react'
 ...
-  const { setInstance } = useInstance()
-  const ref = useRef(null)
-  useEffect(() => {
-      ref?.current && WebViewer(
-        {
-          path: 'http://127.0.0.1:8000/webviewer/lib',
-          initialDoc: getRandomLocalDocUrl()
-        },
-        ref.current
-      ).then(instance => {
-        setInstance(instance)
-      })
-  }, [ref])
-
   return (
-    <div id='someComponent'>
-      <p>Display the document below</p>
-      <DocumentViewer ref={ref}/>
-    </div>
+    <>
+      <h1>Hello document!</h1>
+      <DocumentViewerSimpleDisplay document=''/>
+    </>
   )
 ```
+That's it! You should see your document being presented on your page. 
 
-You will now be able to access the WebViewer instance at other places of your React app!
+## Full Documentation
+Please refer to the DOCUMENTATION.md
 
-```
-OtherComonent.tsx
-import useInstances from '@pdftron/webviewer-react'
-...
-const { instance } = useInstance()
-```
-
-For example if you want to create an annotation, just grab the annotationManager from the WebViewer instance, create an annotation object and add it to your document:
-
-```
-const manager = instance.Core.annotationManager
-const rectangleAnnot = new instance.Core.Annotations.RectangleAnnotation()
-rectangleAnnot.PageNumber = 1
-rectangleAnnot.X = 200
-rectangleAnnot.Y = 180
-rectangleAnnot.Width = 220
-rectangleAnnot.Height = 170
-rectangleAnnot.FillColor = new instance.Core.Annotations.Color(
-  255,
-  255,
-  0
-)
-rectangleAnnot.Author = 'Test User'
-rectangleAnnot.setContents('Comment on this rectangle')
-
-manager.addAnnotation(rectangleAnnot)
-```
-Or if you want to enable the default PDFTron WebViewer Tools Menu:
-```
-const el = ['toolsHeader']
-instance.UI.enableElements(el)
-```
-Visit PDFTron's [WebViewer](https://www.pdftron.com/documentation/web/) page to see what else you can do with the WebViewer instance!
-## Installation for local development of this library
-
-```
-git clone https://github.com/PDFTron/webviewer-react.git
-cd webviewer-react
-npm i && npm run installpeer
-npm run preparevwlib
-```
-
-## Build
-
-Run `npm run build` to build the project. The compiled module will be stored in the `lib` directory.
+## Contributing
+If you are interested in helping contribute to this project, please take a look at our CONTRIBUTING guide.
